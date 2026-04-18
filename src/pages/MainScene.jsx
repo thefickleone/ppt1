@@ -1,17 +1,13 @@
 import usePresentationStore from '../store/usePresentationStore';
-import { motion } from 'framer-motion';
 import SceneCanvas from '../components/SceneCanvas';
 
 const STEP_TITLES = {
-  0: 'Intro',
-  1: 'System Setup',
-  2: 'Motion Begins',
-  3: 'Charge Separation',
-  4: 'Electric Field Forms',
-  5: 'Formula Emerges',
-  6: 'Circuit Forms',
-  7: 'Current Flow',
-  8: "Lenz's Law",
+  0: 'Setup',
+  1: 'Motion',
+  2: 'Magnetic Field',
+  3: 'Charge Motion',
+  4: 'Charge Separation',
+  5: 'Current',
 };
 
 function MainScene() {
@@ -23,27 +19,25 @@ function MainScene() {
     2: 'The rod moves through a magnetic field',
     3: 'Magnetic force acts on charges inside the rod',
     4: 'Charge separation creates potential difference',
+    5: 'Current appears through the closed path',
   };
 
   const bottomText = captionTextByStep[currentStep] || STEP_TITLES[currentStep] || `Step ${currentStep}`;
+  const title = STEP_TITLES[currentStep] || 'Presentation';
 
   return (
     <section className="space-y-5 md:space-y-6">
-      <p className="text-center text-sm tracking-wide text-[#aaaaaa]">Motional EMF Presentation - Step {currentStep}</p>
+      <p className="text-center text-sm tracking-wide text-[#aaaaaa]">
+        Step {currentStep}: {title}
+      </p>
 
       <div className="h-[400px] w-full overflow-hidden rounded-[16px] border border-white/10 bg-[#0a0a0a]">
         <SceneCanvas />
       </div>
 
-      <motion.p
-        key={currentStep}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="text-center text-sm text-[#cccccc]"
-      >
+      <p className="text-center text-sm text-[#cccccc] transition-opacity duration-300">
         {bottomText}
-      </motion.p>
+      </p>
     </section>
   );
 }

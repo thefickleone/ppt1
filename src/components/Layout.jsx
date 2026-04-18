@@ -1,7 +1,4 @@
 import { useEffect } from 'react';
-import FormulaOverlay from './FormulaOverlay';
-import InfoCard from './InfoCard';
-import SceneCanvas from './SceneCanvas';
 import usePresentationStore from '../store/usePresentationStore';
 
 function Layout({ children }) {
@@ -29,13 +26,8 @@ function Layout({ children }) {
   }, [nextStep, prevStep]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-canvas text-gray-100">
-      <SceneCanvas />
-      <div className="relative z-10 grid h-full w-full place-items-center px-8">{children}</div>
-      <FormulaOverlay />
-      <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-end px-6">
-        <InfoCard />
-      </div>
+    <div className="min-h-screen bg-canvas px-4 py-10 text-gray-100 md:py-14">
+      <div className="mx-auto w-full max-w-[900px]">{children}</div>
     </div>
   );
 }
