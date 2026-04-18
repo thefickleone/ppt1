@@ -7,6 +7,7 @@ const STEP_TITLES = {
   3: 'Charge Separation',
   4: 'Electric Field Forms',
   5: 'Formula Emerges',
+  6: 'Circuit Forms',
 };
 
 function MainScene() {
