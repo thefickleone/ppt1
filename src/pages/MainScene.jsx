@@ -8,6 +8,7 @@ const STEP_TITLES = {
   4: 'Electric Field Forms',
   5: 'Formula Emerges',
   6: 'Circuit Forms',
+  7: 'Current Flow',
 };
 
 function MainScene() {

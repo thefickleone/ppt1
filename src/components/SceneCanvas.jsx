@@ -3,6 +3,7 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { Vector3 } from 'three';
 import Circuit from './Circuit';
+import CurrentFlow from './CurrentFlow';
 import ElectricField from './ElectricField';
 import MagneticField from './MagneticField';
 import RodSystem from './RodSystem';
@@ -53,6 +54,7 @@ function SceneCanvas() {
         <MagneticField />
         <ElectricField />
         <Circuit />
+        <CurrentFlow />
         <RodSystem />
         <CameraRig />
       </Canvas>
