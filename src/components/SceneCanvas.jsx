@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
 import { Vector3 } from 'three';
+import MagneticField from './MagneticField';
 import RodSystem from './RodSystem';
 import useStepCameraTarget from '../hooks/useStepCameraTarget';
 
@@ -47,6 +48,7 @@ function SceneCanvas() {
         />
         <Environment preset="studio" intensity={0.35} />
 
+        <MagneticField />
         <RodSystem />
         <CameraRig />
       </Canvas>
