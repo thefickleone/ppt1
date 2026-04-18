@@ -1,5 +1,6 @@
 import usePresentationStore from '../store/usePresentationStore';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import SceneCanvas from '../components/SceneCanvas';
 
 const STEP_TITLES = {
   0: 'Intro',
@@ -15,45 +16,35 @@ const STEP_TITLES = {
 
 function MainScene() {
   const currentStep = usePresentationStore((state) => state.currentStep);
-  const maxSteps = usePresentationStore((state) => state.maxSteps);
 
-  const currentTitle = STEP_TITLES[currentStep] || `Step ${currentStep}`;
+  const captionTextByStep = {
+    0: 'A conducting rod placed on rails',
+    1: 'A conducting rod moving with velocity v',
+    2: 'The rod moves through a magnetic field',
+    3: 'Magnetic force acts on charges inside the rod',
+    4: 'Charge separation creates potential difference',
+  };
 
-  if (currentStep <= 2) {
-    const captionTextByStep = {
-      0: 'A conducting rod placed on rails',
-      1: 'A conducting rod moving with velocity v',
-      2: 'The rod moves through a magnetic field',
-    };
-    const captionText = captionTextByStep[currentStep];
-
-    return (
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={currentStep}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.5, ease: 'easeOut' }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-sm text-[#cccccc]"
-        >
-          {captionText}
-        </motion.p>
-      </AnimatePresence>
-    );
-  }
+  const bottomText = captionTextByStep[currentStep] || STEP_TITLES[currentStep] || `Step ${currentStep}`;
 
   return (
-    <>
-      <p className="absolute left-6 top-6 text-sm text-gray-400">
-        Step {currentStep} / {maxSteps}
-      </p>
+    <section className="space-y-5 md:space-y-6">
+      <p className="text-center text-sm tracking-wide text-[#aaaaaa]">Motional EMF Presentation - Step {currentStep}</p>
 
-      <div className="text-center">
-        <h1 className="text-5xl font-semibold tracking-tight text-gray-100 md:text-7xl">{currentTitle}</h1>
-        <p className="mt-5 text-base text-gray-400 md:text-lg">Use Left/Right arrows or Space to navigate</p>
+      <div className="h-[400px] w-full overflow-hidden rounded-[16px] border border-white/10 bg-[#0a0a0a]">
+        <SceneCanvas />
       </div>
-    </>
+
+      <motion.p
+        key={currentStep}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
+        className="text-center text-sm text-[#cccccc]"
+      >
+        {bottomText}
+      </motion.p>
+    </section>
   );
 }
 
