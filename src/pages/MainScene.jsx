@@ -4,6 +4,9 @@ const STEP_TITLES = {
   0: 'Intro',
   1: 'System Setup',
   2: 'Motion Begins',
+  3: 'Charge Separation',
+  4: 'Electric Field Forms',
+  5: 'Formula Emerges',
 };
 
 function MainScene() {

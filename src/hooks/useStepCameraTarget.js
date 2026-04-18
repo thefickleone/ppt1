@@ -18,13 +18,21 @@ const CAMERA_STEPS = {
     position: [0, 0.08, 3.2],
     lookAt: [0, 0.03, 0],
   },
+  4: {
+    position: [0.45, 0.22, 3.35],
+    lookAt: [0, 0.03, 0],
+  },
+  5: {
+    position: [0.15, 0.14, 3.1],
+    lookAt: [0, 0.03, 0],
+  },
 };
 
 function useStepCameraTarget() {
   const currentStep = usePresentationStore((state) => state.currentStep);
 
   return useMemo(() => {
-    const step = Math.max(0, Math.min(currentStep, 3));
+    const step = Math.max(0, Math.min(currentStep, 5));
     return CAMERA_STEPS[step];
   }, [currentStep]);
 }

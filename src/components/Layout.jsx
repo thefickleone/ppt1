@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import FormulaOverlay from './FormulaOverlay';
 import SceneCanvas from './SceneCanvas';
 import usePresentationStore from '../store/usePresentationStore';
 
@@ -30,6 +31,7 @@ function Layout({ children }) {
     <div className="h-screen w-screen overflow-hidden bg-canvas text-gray-100">
       <SceneCanvas />
       <div className="relative z-10 grid h-full w-full place-items-center px-8">{children}</div>
+      <FormulaOverlay />
     </div>
   );
 }
