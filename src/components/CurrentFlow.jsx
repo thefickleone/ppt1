@@ -43,6 +43,7 @@ function CurrentFlow() {
     const visibility = progressRef.current;
 
     materialRef.current.opacity = MathUtils.lerp(0, 0.8, visibility);
+    materialRef.current.emissiveIntensity = MathUtils.lerp(1.2, 2, visibility);
     flowRef.current.visible = visibility > 0.01;
 
     if (!flowRef.current.visible) {

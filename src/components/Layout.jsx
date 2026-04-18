@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import FormulaOverlay from './FormulaOverlay';
+import InfoCard from './InfoCard';
 import SceneCanvas from './SceneCanvas';
 import usePresentationStore from '../store/usePresentationStore';
 
@@ -32,6 +33,9 @@ function Layout({ children }) {
       <SceneCanvas />
       <div className="relative z-10 grid h-full w-full place-items-center px-8">{children}</div>
       <FormulaOverlay />
+      <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-end px-6">
+        <InfoCard />
+      </div>
     </div>
   );
 }

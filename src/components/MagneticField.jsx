@@ -50,7 +50,8 @@ function MagneticField() {
     }
 
     const isActive = currentStep >= 1;
-    const targetOpacity = isActive ? 0.24 : 0;
+    const isCurrentActive = currentStep >= 7;
+    const targetOpacity = isActive ? (isCurrentActive ? 0.3 : 0.24) : 0;
     materialRef.current.opacity = MathUtils.damp(materialRef.current.opacity, targetOpacity, 3.5, delta);
 
     if (groupRef.current) {

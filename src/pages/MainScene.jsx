@@ -9,6 +9,7 @@ const STEP_TITLES = {
   5: 'Formula Emerges',
   6: 'Circuit Forms',
   7: 'Current Flow',
+  8: "Lenz's Law",
 };
 
 function MainScene() {

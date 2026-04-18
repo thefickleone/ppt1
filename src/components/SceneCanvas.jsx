@@ -8,6 +8,7 @@ import ElectricField from './ElectricField';
 import MagneticField from './MagneticField';
 import RodSystem from './RodSystem';
 import useStepCameraTarget from '../hooks/useStepCameraTarget';
+import usePresentationStore from '../store/usePresentationStore';
 
 function CameraRig() {
   const { camera } = useThree();
@@ -32,14 +33,31 @@ function CameraRig() {
   return null;
 }
 
+function AmbientRig({ currentStep }) {
+  const ambientRef = useRef(null);
+
+  useFrame((_, delta) => {
+    if (!ambientRef.current) {
+      return;
+    }
+
+    const target = currentStep >= 7 ? 0.1 : 0.08;
+    ambientRef.current.intensity += (target - ambientRef.current.intensity) * Math.min(1, delta * 3.5);
+  });
+
+  return <ambientLight ref={ambientRef} intensity={0.08} />;
+}
+
 function SceneCanvas() {
+  const currentStep = usePresentationStore((state) => state.currentStep);
+
   return (
     <div className="pointer-events-none absolute inset-0 z-0">
       <Canvas shadows camera={{ fov: 40, near: 0.1, far: 100, position: [0, 0.1, 4.2] }} dpr={[1, 1.5]}>
         <color attach="background" args={['#0b0f14']} />
         <fog attach="fog" args={['#0b0f14', 4, 10]} />
 
-        <ambientLight intensity={0.08} />
+        <AmbientRig currentStep={currentStep} />
         <directionalLight
           castShadow
           position={[2.5, 3, 2]}

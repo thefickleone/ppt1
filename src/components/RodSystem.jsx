@@ -32,7 +32,11 @@ function RodSystem() {
   const electronMaterialRef = useRef(null);
   const negativeGlowRef = useRef(null);
   const positiveGlowRef = useRef(null);
+  const lenzBlobRef = useRef(null);
+  const lenzArrowRef = useRef(null);
   const chargeMixRef = useRef(0);
+  const lenzMixRef = useRef(0);
+  const prevXRef = useRef(0);
 
   const electronData = useMemo(() => buildElectrons(), []);
   const electronTemp = useMemo(() => new Object3D(), []);
@@ -47,20 +51,47 @@ function RodSystem() {
     const t = clock.getElapsedTime();
     const isRodMotionActive = currentStep >= 2;
     const isChargeActive = currentStep >= 3;
+    const isLenzActive = currentStep >= 8;
 
     chargeMixRef.current = MathUtils.damp(chargeMixRef.current, isChargeActive ? 1 : 0, 3.2, delta);
     const chargeMix = chargeMixRef.current;
+    lenzMixRef.current = MathUtils.damp(lenzMixRef.current, isLenzActive ? 1 : 0, 3.4, delta);
+    const lenzMix = lenzMixRef.current;
 
     if (isRodMotionActive) {
       const period = 3.6;
       const omega = (Math.PI * 2) / period;
-      const targetX = Math.sin(t * omega) * 2;
-      rodGroupRef.current.position.x = MathUtils.lerp(rodGroupRef.current.position.x, targetX, 0.08);
+      const baseTargetX = Math.sin(t * omega) * 2;
+      const targetX = MathUtils.lerp(baseTargetX, baseTargetX * 0.86, lenzMix);
+      const lerpStrength = MathUtils.lerp(0.08, 0.055, lenzMix);
+      rodGroupRef.current.position.x = MathUtils.lerp(rodGroupRef.current.position.x, targetX, lerpStrength);
     } else {
       rodGroupRef.current.position.x = MathUtils.lerp(rodGroupRef.current.position.x, 0, 0.1);
     }
 
     rodGroupRef.current.position.y = 0.03 + Math.sin(t * 0.8) * 0.04;
+
+    const currentX = rodGroupRef.current.position.x;
+    const velocity = (currentX - prevXRef.current) / Math.max(delta, 0.0001);
+    const direction = velocity === 0 ? 0 : Math.sign(velocity);
+    prevXRef.current = currentX;
+
+    if (lenzBlobRef.current) {
+      const speed = Math.min(Math.abs(velocity) * 0.05, 0.6);
+      const blobScale = MathUtils.lerp(0.25, 0.45, speed) * (0.4 + lenzMix * 0.6);
+      lenzBlobRef.current.position.x = currentX + direction * (0.18 + speed * 0.1);
+      lenzBlobRef.current.scale.set(blobScale, blobScale * 0.7, blobScale);
+      lenzBlobRef.current.visible = lenzMix > 0.01 && direction !== 0;
+      lenzBlobRef.current.material.opacity = 0.08 + lenzMix * 0.22 + speed * 0.12;
+    }
+
+    if (lenzArrowRef.current) {
+      const arrowOpacity = 0.05 + lenzMix * 0.18;
+      lenzArrowRef.current.visible = lenzMix > 0.01 && direction !== 0;
+      lenzArrowRef.current.position.x = currentX - direction * 0.18;
+      lenzArrowRef.current.rotation.z = direction > 0 ? Math.PI : 0;
+      lenzArrowRef.current.material.opacity = arrowOpacity;
+    }
 
     rodMaterialRef.current.opacity = MathUtils.lerp(1, 0.62, chargeMix);
     rodMaterialRef.current.metalness = MathUtils.lerp(1, 0.65, chargeMix);
@@ -165,6 +196,30 @@ function RodSystem() {
             color="#62d4ff"
             emissive="#00bfff"
             emissiveIntensity={0.3}
+            transparent
+            opacity={0}
+            depthWrite={false}
+          />
+        </mesh>
+
+        <mesh ref={lenzBlobRef} position={[0, 0, 0]}>
+          <sphereGeometry args={[0.08, 12, 12]} />
+          <meshStandardMaterial
+            color="#ff8a5b"
+            emissive="#ff5f3f"
+            emissiveIntensity={0.9}
+            transparent
+            opacity={0}
+            depthWrite={false}
+          />
+        </mesh>
+
+        <mesh ref={lenzArrowRef} position={[0, -0.04, 0]}>
+          <coneGeometry args={[0.03, 0.12, 10]} />
+          <meshStandardMaterial
+            color="#ff9a6a"
+            emissive="#ff6d4f"
+            emissiveIntensity={0.7}
             transparent
             opacity={0}
             depthWrite={false}
