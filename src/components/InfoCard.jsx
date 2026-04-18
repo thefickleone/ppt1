@@ -39,6 +39,10 @@ function InfoCard() {
     };
   }, []);
 
+  if (currentStep <= 2 || !card) {
+    return null;
+  }
+
   return (
     <AnimatePresence>
       {card ? (

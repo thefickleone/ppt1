@@ -6,6 +6,8 @@ import Circuit from './Circuit';
 import CurrentFlow from './CurrentFlow';
 import ElectricField from './ElectricField';
 import MagneticField from './MagneticField';
+import OpeningMagneticField from './OpeningMagneticField';
+import OpeningSetup from './OpeningSetup';
 import RodSystem from './RodSystem';
 import useStepCameraTarget from '../hooks/useStepCameraTarget';
 import usePresentationStore from '../store/usePresentationStore';
@@ -33,6 +35,17 @@ function CameraRig() {
   return null;
 }
 
+function OpeningCamera() {
+  const { camera } = useThree();
+
+  useEffect(() => {
+    camera.position.set(1, 0.65, 4.6);
+    camera.lookAt(0, 0.03, 0);
+  }, [camera]);
+
+  return null;
+}
+
 function AmbientRig({ currentStep }) {
   const ambientRef = useRef(null);
 
@@ -50,31 +63,45 @@ function AmbientRig({ currentStep }) {
 
 function SceneCanvas() {
   const currentStep = usePresentationStore((state) => state.currentStep);
+  const isOpeningStep = currentStep <= 2;
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0">
-      <Canvas shadows camera={{ fov: 40, near: 0.1, far: 100, position: [0, 0.1, 4.2] }} dpr={[1, 1.5]}>
-        <color attach="background" args={['#0b0f14']} />
-        <fog attach="fog" args={['#0b0f14', 4, 10]} />
+      <Canvas shadows camera={{ fov: isOpeningStep ? 43 : 40, near: 0.1, far: 100, position: [0, 0.1, 4.2] }} dpr={[1, 1.5]}>
+        <color attach="background" args={[isOpeningStep ? '#0a0a0a' : '#0b0f14']} />
+        <fog attach="fog" args={[isOpeningStep ? '#0a0a0a' : '#0b0f14', 4, 10]} />
 
-        <AmbientRig currentStep={currentStep} />
-        <directionalLight
-          castShadow
-          position={[2.5, 3, 2]}
-          intensity={0.75}
-          color="#c7d5ea"
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
-          shadow-bias={-0.0002}
-        />
-        <Environment preset="studio" intensity={0.35} />
+        {isOpeningStep ? (
+          <>
+            <ambientLight intensity={0.12} />
+            <directionalLight position={[2, 2.6, 2.4]} intensity={0.5} color="#d2d7de" />
+            <Environment preset="studio" intensity={0.2} />
+            <OpeningSetup step={currentStep} />
+            <OpeningMagneticField step={currentStep} />
+            <OpeningCamera />
+          </>
+        ) : (
+          <>
+            <AmbientRig currentStep={currentStep} />
+            <directionalLight
+              castShadow
+              position={[2.5, 3, 2]}
+              intensity={0.75}
+              color="#c7d5ea"
+              shadow-mapSize-width={1024}
+              shadow-mapSize-height={1024}
+              shadow-bias={-0.0002}
+            />
+            <Environment preset="studio" intensity={0.35} />
 
-        <MagneticField />
-        <ElectricField />
-        <Circuit />
-        <CurrentFlow />
-        <RodSystem />
-        <CameraRig />
+            <MagneticField />
+            <ElectricField />
+            <Circuit />
+            <CurrentFlow />
+            <RodSystem />
+            <CameraRig />
+          </>
+        )}
       </Canvas>
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#0b0f1400] to-[#070a10]/70" />
     </div>
