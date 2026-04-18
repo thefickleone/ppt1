@@ -3,20 +3,20 @@ import usePresentationStore from '../store/usePresentationStore';
 
 const CAMERA_STEPS = {
   0: {
-    position: [0, 0, 5],
-    lookAt: [0, 0, 0],
+    position: [0, 0.08, 4.2],
+    lookAt: [0, 0.03, 0],
   },
   1: {
-    position: [0, 0, 4],
-    lookAt: [0, 0, 0],
+    position: [0, 0.08, 3.7],
+    lookAt: [0, 0.03, 0],
   },
   2: {
-    position: [1, 0.5, 4],
-    lookAt: [0, 0, 0],
+    position: [0.9, 0.45, 3.9],
+    lookAt: [0, 0.03, 0],
   },
   3: {
-    position: [0, 0, 3],
-    lookAt: [0, 0, 0],
+    position: [0, 0.08, 3.2],
+    lookAt: [0, 0.03, 0],
   },
 };
 
