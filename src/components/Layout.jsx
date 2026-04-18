@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import SceneCanvas from './SceneCanvas';
 import usePresentationStore from '../store/usePresentationStore';
 
 function Layout({ children }) {
@@ -27,7 +28,8 @@ function Layout({ children }) {
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-canvas text-gray-100">
-      <div className="relative grid h-full w-full place-items-center px-8">{children}</div>
+      <SceneCanvas />
+      <div className="relative z-10 grid h-full w-full place-items-center px-8">{children}</div>
     </div>
   );
 }
